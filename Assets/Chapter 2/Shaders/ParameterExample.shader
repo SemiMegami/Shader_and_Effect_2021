@@ -1,4 +1,4 @@
-Shader "CookbookShader/Chapter 02/StandardDiffuse"
+Shader "CookbookShader/Chapter 02/ParameterExample"
 {
     Properties
     {
@@ -6,7 +6,7 @@ Shader "CookbookShader/Chapter 02/StandardDiffuse"
         _AmbientColor("Ambient Color", Color) = (1,1,1,1)
         _Glossiness ("Smoothness", Range(0,1)) = 0.5
         _Metallic ("Metallic", Range(0,1)) = 0.0
-        _MySliderValue ("This is a Slider", Range(0,10)) = 2.5
+        _MySliderValue("This is a Slider", Range(0,10)) = 2.5
     }
     SubShader
     {
@@ -23,12 +23,14 @@ Shader "CookbookShader/Chapter 02/StandardDiffuse"
 
         struct Input
         {
-            float2 uv_MainTex;
+            float2 uv_MainText;
         };
 
         half _Glossiness;
         half _Metallic;
         fixed4 _Color;
+        float4 _AmbientColor;
+        float _MySliderValue;
 
         // Add instancing support for this shader. You need to check 'Enable Instancing' on materials that use the shader.
         // See https://docs.unity3d.com/Manual/GPUInstancing.html for more information about instancing.
@@ -40,7 +42,7 @@ Shader "CookbookShader/Chapter 02/StandardDiffuse"
         void surf (Input IN, inout SurfaceOutputStandard o)
         {
             // Albedo comes from a texture tinted by color
-            fixed4 c = _Color;
+            fixed4 c = pow((_Color + _AmbientColor), _MySliderValue);
             o.Albedo = c.rgb;
             // Metallic and smoothness come from slider variables
             o.Metallic = _Metallic;
